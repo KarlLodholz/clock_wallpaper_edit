@@ -1,0 +1,70 @@
+$black: #252525;
+$blue: #45d9fd;
+$dirtyWhite: #f4f4f4;
+$darkPink: #ee2560;
+
+// transition for cx, cy, and d attribute 	
+* {
+	transition: all .5s;
+}
+
+body {
+	background-color: $black;
+	font-family: 'Lato', sans-serif;
+	font-weight: 300;
+}
+
+.text {
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+}
+
+.text, a {
+	color: $dirtyWhite;
+	font-weight: 100;
+}
+
+svg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.textTime {
+	fill: $dirtyWhite;
+	text-anchor: middle;
+	alignment-baseline: middle;
+	font-size: 1.5rem;
+	font-weight: 100;
+}
+
+.outerRing {
+	fill: none;
+	stroke: $dirtyWhite;
+	stroke-width: 2px;
+	stroke-dasharray: 4px;
+	opacity: .5;
+}
+
+.primCircle {
+	fill: $black;
+	stroke: $dirtyWhite;
+	stroke-width: 10px;
+}
+
+.secCircle {
+	fill: $blue;
+	stroke: $black;
+	stroke-width: 3px;
+}
+
+.spike {
+	stroke: $dirtyWhite;
+	stroke-width: 2px;
+}
+
+.triangle {
+	fill: $darkPink;
+}
