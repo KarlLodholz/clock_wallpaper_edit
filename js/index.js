@@ -9,7 +9,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 //wallpaper properties
 var _24hourdial = true,
 	_24hourdigitial = true,
-	dialsize = 700,
+	dialsize = 600,
 	dialoffset = 110,
 	backgroundcolor,
 	dialcolor,
@@ -46,7 +46,7 @@ var maxSize = undefined;
 if (minWH < 430) {
 	maxSize = minWH - 30;
 } else {
-	maxSize = 700;
+	maxSize = 800;
 }
 
 // utils
@@ -264,7 +264,7 @@ var Clock = function (_React$Component) {
 
 		var mid = size / 2;
 
-		var paddedRadius = (size - dialoffset) / 2;
+		var paddedRadius = (size - dialoffset) / 2 - 40;
 
 		window.setTimeout(function () {
 			_this2.setState({
