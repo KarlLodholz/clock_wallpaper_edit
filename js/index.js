@@ -19,17 +19,34 @@ var _24hourdial = true,
 window.wallpaperPropertyListener = {
 	applyUserProperties: function (properties) {
 		//dial options
-		_24hourdial = properties._24hourdial.value;
-		_24hourdigitial = properties._24hourdigitial.value;
-		dialcolor = properties.dialcolor.value;
-		dialsize = properties.dialsize.value;
-		dialoffset = properties.dialoffset.value;
+		if(properties._24hourdial) {
+			_24hourdial = properties._24hourdial.value;
+		}
+		if(properties._24hourdigitial) {
+			_24hourdigitial = properties._24hourdigitial.value;
+			_24hourdigitial = false;
+		}
+		if(properties.dialsize) {
+			dialsize = properties.dialsize.value;
+		}
+		if(properties.dialoffset) {
+			dialoffset = properties.dialoffset.value;
+		}
 		//colors
-		handscolor = properties.handscolor.value;
-		backgroundcolor = properties.backgroundcolor.value;
-		trianglecolor = properties.trianglecolor.value;
+		if(properties.backgroundcolor) {
+			backgroundcolor = properties.backgroundcolor.value;
+		}
+		if(properties.dialcolor) {
+			dialcolor = properties.dialcolor.value;
+		}
+		if(properties.handscolor) {
+			handscolor = properties.handscolor.value;
+		}
+		if(properties.trianglecolor) {
+			trianglecolor = properties.trianglecolor.value;
+		}
 		//rerender the stuffs
-		ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock'));
+		// ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock'));
 	},
 };
 
@@ -106,6 +123,11 @@ var TextTime = function TextTime(_ref) {
 	var time = _ref.time;
 
 	var str = time.toTimeString().slice(0, 8).replace(/:/g, " : ");
+	if(!_24hourdigitial) {
+		str = time.getHours()%12 + " : " 
+		  + ("0"+time.getMinutes()).slice(-2) + " : " 
+		  + ("0"+time.getSeconds()).slice(-2);
+	}
 	return React.createElement(
 		"text",
 		{ x: x, y: y, className: "textTime" },
