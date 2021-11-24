@@ -24,7 +24,6 @@ window.wallpaperPropertyListener = {
 		}
 		if(properties._24hourdigitial) {
 			_24hourdigitial = properties._24hourdigitial.value;
-			_24hourdigitial = false;
 		}
 		if(properties.dialsize) {
 			dialsize = properties.dialsize.value;
@@ -34,10 +33,21 @@ window.wallpaperPropertyListener = {
 		}
 		//colors
 		if(properties.backgroundcolor) {
-			backgroundcolor = properties.backgroundcolor.value;
+			var c = properties.backgroundcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')'; // Solid color
+			document.getElementsByTagName("body")[0].style.setProperty('background-color',colorString);
+			document.getElementsByClassName("primCircle")[0].style.setProperty('fill',colorString);
 		}
 		if(properties.dialcolor) {
-			dialcolor = properties.dialcolor.value;
+			// dialcolor = properties.dialcolor.value;
+			var c = properties.backgroundcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')'; // Solid color
+			document.getElementsByTagName("body")[0].style.setProperty('background-color',colorString);
+			document.getElementsByClassName("primCircle")[0].style.setProperty('fill',colorString);
 		}
 		if(properties.handscolor) {
 			handscolor = properties.handscolor.value;
@@ -45,8 +55,6 @@ window.wallpaperPropertyListener = {
 		if(properties.trianglecolor) {
 			trianglecolor = properties.trianglecolor.value;
 		}
-		//rerender the stuffs
-		// ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock'));
 	},
 };
 
@@ -92,8 +100,6 @@ var HMS = function HMS(t) {
 
 var pathStringVars = function pathStringVars(c, r, time) {
 	// center, radius and time = this.props		
-	// const {c,r,time} = p
-
 	var _HMS = HMS(time);
 
 	var h = _HMS.h;
@@ -261,9 +267,6 @@ var SecCircle = function SecCircle(_ref6) {
 
 // main container
 var Clock = function (_React$Component) {
-	// import jsonFile from '../project.json';
-	// _24hourdial = jsonFile.general.properties._24hourdial.value;
-
 	_inherits(Clock, _React$Component);
 
 	function Clock() {
