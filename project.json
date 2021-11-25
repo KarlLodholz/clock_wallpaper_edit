@@ -1,84 +1,141 @@
 {
-	"file": "index.html",
-	"general": {
-		"properties": {
-			"_24hourdial": {
-				"index": 4,
-				"order": 104,
-				"text": "24 hour dial",
-				"type": "bool",
-				"value": true
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"_24hourdial" : 
+			{
+				"index" : 8,
+				"order" : 108,
+				"text" : "24 hour dial",
+				"type" : "bool",
+				"value" : true
 			},
-			"_24hourdigitial": {
-				"index": 5,
-				"order": 105,
-				"text": "24 hour digitial",
-				"type": "bool",
-				"value": true
+			"_24hourdigitial" : 
+			{
+				"index" : 9,
+				"order" : 109,
+				"text" : "24 hour digitial",
+				"type" : "bool",
+				"value" : true
 			},
-			"backgroundcolor": {
-				"index": 3,
-				"order": 103,
-				"text": "background color",
-				"type": "color",
-				"value": "0.1450980392156863 0.1450980392156863 0.1450980392156863"
+			"backgroundcolor" : 
+			{
+				"index" : 5,
+				"order" : 105,
+				"text" : "Background color",
+				"type" : "color",
+				"value" : "0.1450980392156863 0.1450980392156863 0.1450980392156863"
 			},
-			"dialcolor": {
-				"index": 2,
-				"order": 102,
-				"text": "Dial Color",
-				"type": "color",
-				"value": "0.9568627450980393 0.9568627450980393 0.9568627450980393"
+			"dialcolor" : 
+			{
+				"index" : 0,
+				"order" : 100,
+				"text" : "Dial Color",
+				"type" : "color",
+				"value" : "0.9568627450980393 0.9568627450980393 0.9568627450980393"
 			},
-			"dialoffset": {
-				"fraction": false,
-				"index": 7,
-				"max": 500,
-				"min": -500,
-				"order": 107,
-				"text": "dial offset",
-				"type": "slider",
-				"value": 30
+			"dialoffset" : 
+			{
+				"fraction" : false,
+				"index" : 13,
+				"max" : 500,
+				"min" : -500,
+				"order" : 113,
+				"text" : "dial offset",
+				"type" : "slider",
+				"value" : 30
 			},
-			"dialsize": {
-				"fraction": false,
-				"index": 6,
-				"max": 1000,
-				"min": 0,
-				"order": 106,
-				"text": "dial size",
-				"type": "slider",
-				"value": 600
+			"dialsize" : 
+			{
+				"fraction" : false,
+				"index" : 12,
+				"max" : 1000,
+				"min" : 0,
+				"order" : 112,
+				"text" : "dial size",
+				"type" : "slider",
+				"value" : 600
 			},
-			"handscolor": {
-				"index": 0,
-				"order": 100,
-				"text": "Hands Color",
-				"type": "color",
-				"value": "0.27058823529411763 0.8509803921568627 0.9921568627450981"
+			"digitalcolor" : 
+			{
+				"index" : 7,
+				"order" : 107,
+				"text" : "Digital Clock Color",
+				"type" : "color",
+				"value" : "0.9568627450980393 0.9568627450980393 0.9568627450980393"
 			},
-			"schemecolor": {
-				"order": 0,
-				"text": "ui_browse_properties_scheme_color",
-				"type": "color",
-				"value": "0.9333333333333333 0.1450980392156863 0.3764705882352941"
+			"facecolor" : 
+			{
+				"index" : 4,
+				"order" : 104,
+				"text" : "Face Color",
+				"type" : "color",
+				"value" : "0.1450980392156863 0.1450980392156863 0.1450980392156863"
 			},
-			"trianglecolor": {
-				"index": 1,
-				"order": 101,
-				"text": "Triangle Color",
-				"type": "color",
-				"value": "0.9333333333333333 0.1450980392156863 0.3764705882352941"
+			"handcolor" : 
+			{
+				"index" : 3,
+				"order" : 103,
+				"text" : "Hand Color",
+				"type" : "color",
+				"value" : "0.27058823529411763 0.8509803921568627 0.9921568627450981"
+			},
+			"hourticks" : 
+			{
+				"index" : 10,
+				"order" : 110,
+				"text" : "Hour Ticks",
+				"type" : "bool",
+				"value" : true
+			},
+			"minsecticks" : 
+			{
+				"index" : 11,
+				"order" : 111,
+				"text" : "Minute/Second Ticks",
+				"type" : "bool",
+				"value" : true
+			},
+			"outerdialcolor" : 
+			{
+				"index" : 1,
+				"order" : 101,
+				"text" : "Outer Dial Color",
+				"type" : "color",
+				"value" : "0.9568627450980393 0.9568627450980393 0.9568627450980393"
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0.9333333333333333 0.1450980392156863 0.3764705882352941"
+			},
+			"tickcolor" : 
+			{
+				"index" : 2,
+				"order" : 102,
+				"text" : "Tick Color",
+				"type" : "color",
+				"value" : "0.9568627450980393 0.9568627450980393 0.9568627450980393"
+			},
+			"trianglecolor" : 
+			{
+				"index" : 6,
+				"order" : 106,
+				"text" : "Triangle Color",
+				"type" : "color",
+				"value" : "0.9333333333333333 0.1450980392156863 0.3764705882352941"
 			}
 		}
 	},
-	"monetization": false,
-	"preview": "preview.gif",
-	"tags": [
-		"Abstract"
-	],
-	"title": "Clock Edit",
-	"type": "web",
-	"version": 0,
-	"visibility": "public"
+	"monetization" : false,
+	"preview" : "",
+	"tags" : [ "Abstract" ],
+	"title" : "Clock Edit",
+	"type" : "web",
+	"version" : 0,
+	"visibility" : "public"
 }

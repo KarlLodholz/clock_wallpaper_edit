@@ -15,11 +15,6 @@ body {
   bottom: 10px;
 }
 
-.text, a {
-  color: #f4f4f4;
-  font-weight: 100;
-}
-
 svg {
   position: absolute;
   top: 50%;
@@ -38,26 +33,20 @@ svg {
 
 .outerRing {
   fill: none;
-  stroke: #f4f4f4;
-  stroke-width: 2px;
-  stroke-dasharray: 4px;
+  stroke-width: 8px;
+  stroke-dasharray: 1.57px;
   opacity: .5;
 }
 
-.primCircle {
-  fill: #252525;
-  stroke: #f4f4f4;
+.crown {
   stroke-width: 10px;
 }
 
-.secCircle {
-  fill: #45d9fd;
-  stroke: #252525;
+.hands {
   stroke-width: 3px;
 }
 
-.spike {
-  stroke: #f4f4f4;
+.tick {
   stroke-width: 2px;
 }
 

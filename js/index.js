@@ -7,18 +7,30 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 //wallpaper properties
-var _24hourdial = true,
+var hourticks = true,
+	minsecticks = true,
+	_24hourdial = true,
 	_24hourdigitial = true,
 	dialsize = 600,
 	dialoffset = 110,
-	backgroundcolor,
-	dialcolor,
-	handscolor,
-	trianglecolor;
+	secondradius = 5,		// second hand radius
+	minuteradius = 10,		// minute hand radius
+	hourradius	 = 15,		// hour hand radius
+	tickcolor = "#f4f4f4",
+	facecolor = "#252525",
+	dialcolor = "#f4f4f4",
+	outerdialcolor = "#f4f4f4",
+	handcolor = "#45d9fd";
 
 window.wallpaperPropertyListener = {
 	applyUserProperties: function (properties) {
 		//dial options
+		if(properties.hourticks) {
+			hourticks = properties.hourticks.value;
+		}
+		if(properties.minsecticks) {
+			minsecticks = properties.minsecticks.value;
+		}
 		if(properties._24hourdial) {
 			_24hourdial = properties._24hourdial.value;
 		}
@@ -32,47 +44,64 @@ window.wallpaperPropertyListener = {
 			dialoffset = properties.dialoffset.value;
 		}
 		//colors
+		if(properties.dialcolor) {
+			var c = properties.dialcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')';
+			dialcolor = colorString;
+		}
+		if(properties.outerdialcolor) {
+			var c = properties.outerdialcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')';
+			outerdialcolor = colorString;
+		}
+		if(properties.tickcolor) {
+			var c = properties.tickcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')';
+			tickcolor = colorString;
+		}
+		if(properties.handcolor) {
+			var c = properties.handcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')'; 
+			handcolor = colorString;
+		}
+		if(properties.facecolor) {
+			var c = properties.facecolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')';
+			facecolor = colorString;
+		}
 		if(properties.backgroundcolor) {
 			var c = properties.backgroundcolor.value.split(' ').map(function(c) {
 				return Math.ceil(c * 255)
 			});
-			var colorString = 'rgb(' + c + ')'; // Solid color
+			var colorString = 'rgb(' + c + ')';
 			document.getElementsByTagName("body")[0].style.setProperty('background-color',colorString);
-			document.getElementsByClassName("primCircle")[0].style.setProperty('fill',colorString);
-		}
-		if(properties.dialcolor) {
-			// dialcolor = properties.dialcolor.value;
-			var c = properties.backgroundcolor.value.split(' ').map(function(c) {
-				return Math.ceil(c * 255)
-			});
-			var colorString = 'rgb(' + c + ')'; // Solid color
-			document.getElementsByTagName("body")[0].style.setProperty('background-color',colorString);
-			document.getElementsByClassName("primCircle")[0].style.setProperty('fill',colorString);
-		}
-		if(properties.handscolor) {
-			handscolor = properties.handscolor.value;
 		}
 		if(properties.trianglecolor) {
-			trianglecolor = properties.trianglecolor.value;
+			var c = properties.trianglecolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')';
+			document.getElementsByClassName("triangle")[0].style.setProperty('fill',colorString);			
+		}
+		if(properties.digitalcolor) {
+			var c = properties.digitalcolor.value.split(' ').map(function(c) {
+				return Math.ceil(c * 255)
+			});
+			var colorString = 'rgb(' + c + ')';
+			document.getElementsByClassName("textTime")[0].style.setProperty('fill',colorString);
 		}
 	},
 };
-
-// small circle radius
-var r1 = 5;
-var r2 = 10;
-var r3 = 15;
-var width = window.innerWidth;
-var height = window.innerHeight;
-
-var minWH = Math.min(width, height);
-
-var maxSize = undefined;
-if (minWH < 430) {
-	maxSize = minWH - 30;
-} else {
-	maxSize = 800;
-}
 
 // utils
 // deg to radian
@@ -123,64 +152,29 @@ var pathStringVars = function pathStringVars(c, r, time) {
 	return { hx: hx, hy: hy, mx: mx, my: my, sx: sx, sy: sy };
 };
 
-var TextTime = function TextTime(_ref) {
-	var x = _ref.x;
-	var y = _ref.y;
-	var time = _ref.time;
-
-	var str = time.toTimeString().slice(0, 8).replace(/:/g, " : ");
+var TextTime = function TextTime(i) {
+	var str = i.time.toTimeString().slice(0, 8).replace(/:/g, " : ");
 	if(!_24hourdigitial) {
-		str = time.getHours()%12 + " : " 
-		  + ("0"+time.getMinutes()).slice(-2) + " : " 
-		  + ("0"+time.getSeconds()).slice(-2);
+		str = i.time.getHours()%12 + " : " 
+		  + ("0"+i.time.getMinutes()).slice(-2) + " : " 
+		  + ("0"+i.time.getSeconds()).slice(-2);
 	}
-	return React.createElement(
-		"text",
-		{ x: x, y: y, className: "textTime" },
-		str
-	);
-};
-
-// Circle component
-var Circle = function Circle(_ref2) {
-	var cx = _ref2.cx;
-	var cy = _ref2.cy;
-	var r = _ref2.r;
-	var cl = _ref2.cl;
-	return React.createElement("circle", {
-		cx: cx,
-		cy: cy,
-		r: r,
-		className: cl
-	});
-};
-
-// Single spike
-var Spike = function Spike(_ref3) {
-	var x1 = _ref3.x1;
-	var x2 = _ref3.x2;
-	var y1 = _ref3.y1;
-	var y2 = _ref3.y2;
-	return React.createElement("line", {
-		className: "spike",
-		x1: x1,
-		x2: x2,
-		y1: y1,
-		y2: y2
-	});
+	return React.createElement("text", { x: i.x, y: i.y, className: "textTime" }, str);
 };
 
 // hour hands
-var spikeNodes = function spikeNodes(c, r) {
+var tickNodes = function tickNodes(c, r) {
 	var increment = 15 * (_24hourdial ? 1 : 2);
 	var nodes = [];
 	var range;
-	// hour tics
-	if (true) {
+	// hour ticks
+	if (hourticks) {
 		range = 12 * (_24hourdial ? 2 : 1) + 1
 		for (var i = 1; i < range; i++) {
 			var ang = i * increment;
-			var temp = React.createElement(Spike, {
+			var temp = React.createElement("line", {
+				className: "tick",
+				stroke: tickcolor,
 				x1: rx(r - 5, ang, c),
 				x2: rx(r - 22, ang, c),
 				y1: ry(r - 5, ang, c),
@@ -190,12 +184,14 @@ var spikeNodes = function spikeNodes(c, r) {
 			nodes.push(temp);
 		}
 	}
-	// second tics
-	if (true) {
+	// minute/second ticks
+	if (minsecticks) {
 		increment = 6;
 		for (var i = 1; i < 120; i++) {
 			var ang = i * increment;
-			var temp = React.createElement(Spike, {
+			var temp = React.createElement("line", {
+				className: "tick",
+				stroke: tickcolor,
 				x1: rx(r - 50, ang, c),
 				x2: rx(r - 55, ang, c),
 				y1: ry(r - 50, ang, c),
@@ -208,33 +204,19 @@ var spikeNodes = function spikeNodes(c, r) {
 	return nodes;
 };
 
-// populate Spikes
-var Spikes = function Spikes(_ref4) {
-	var c = _ref4.c;
-	var r = _ref4.r;
+// populate Ticks
+var Ticks = function Ticks(i) {
 	return React.createElement(
 		"g",
 		null,
-		spikeNodes(c, r)
+		tickNodes(i.c, i.r)
 	);
 };
 
 // triangle component
-var Triangle = function Triangle(_ref5) {
-	var c = _ref5.c;
-	var r = _ref5.r;
-	var time = _ref5.time;
-
-	var _pathStringVars = pathStringVars(c, r, time);
-
-	var hx = _pathStringVars.hx;
-	var hy = _pathStringVars.hy;
-	var mx = _pathStringVars.mx;
-	var my = _pathStringVars.my;
-	var sx = _pathStringVars.sx;
-	var sy = _pathStringVars.sy;
-
-	var path = "M" + hx + "," + hy + " L" + mx + "," + my + " L" + sx + "," + sy + " L" + hx + "," + hy;
+var Triangle = function Triangle(i) {
+	var p = pathStringVars(i.c, i.r, i.time);
+	var path = "M" + p.hx + "," + p.hy + " L" + p.mx + "," + p.my + " L" + p.sx + "," + p.sy + " L" + p.hx + "," + p.hy;
 	return React.createElement("path", {
 		className: "triangle",
 		d: path
@@ -242,26 +224,14 @@ var Triangle = function Triangle(_ref5) {
 };
 
 // Secondary circles
-var SecCircle = function SecCircle(_ref6) {
-	var c = _ref6.c;
-	var r = _ref6.r;
-	var time = _ref6.time;
-
-	var _pathStringVars2 = pathStringVars(c, r, time);
-
-	var hx = _pathStringVars2.hx;
-	var hy = _pathStringVars2.hy;
-	var mx = _pathStringVars2.mx;
-	var my = _pathStringVars2.my;
-	var sx = _pathStringVars2.sx;
-	var sy = _pathStringVars2.sy;
-
+var Hands = function Hands(i) {
+	var p = pathStringVars(i.c, i.r, i.time);
 	return React.createElement(
 		"g",
 		null,
-		React.createElement(Circle, { cl: "secCircle", cx: hx, cy: hy, r: r3 }),
-		React.createElement(Circle, { cl: "secCircle", cx: mx, cy: my, r: r2 }),
-		React.createElement(Circle, { cl: "secCircle", cx: sx, cy: sy, r: r1 })
+		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.hx, cy: p.hy, r: hourradius, className: "hands" }),		
+		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.mx, cy: p.my, r: minuteradius, className: "hands" }),		
+		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.sx, cy: p.sy, r: secondradius, className: "hands" }),		
 	);
 };
 
@@ -283,13 +253,13 @@ var Clock = function (_React$Component) {
 	Clock.prototype.render = function render() {
 		var _this2 = this;
 
-		var size = maxSize;
+		// var size = dialsize;
 
-		var viewBox = "0 0 " + size + " " + size;
+		var viewBox = "0 0 " + dialsize + " " + dialsize;
 
-		var mid = size / 2;
+		var mid = dialsize / 2;
 
-		var paddedRadius = (size - dialoffset) / 2 - 40;
+		var paddedRadius = (dialsize - dialoffset) / 2 - 40;
 
 		window.setTimeout(function () {
 			_this2.setState({
@@ -298,33 +268,21 @@ var Clock = function (_React$Component) {
 		}, 1000);
 
 		return React.createElement(
-			"svg",
-			{
-				xmlns: "http://www.w3.org/svg/2000",
-				viewBox: viewBox,
-				width: size,
-				height: size
-			},
-			React.createElement(Circle, { //dashed outer circle
-				cl: "outerRing",
-				cx: mid,
-				cy: mid,
-				r: mid - 5
-			}),
-			React.createElement(Circle, {
-				cl: "primCircle",
-				cx: mid,
-				cy: mid,
-				r: mid - 15
-			}),
+			"svg", 
+			{ xmlns: "http://www.w3.org/svg/2000",
+			viewBox: viewBox, width: dialsize, height: dialsize },
+			// dashed outer circle
+			React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, r: mid-5, className: "outerRing" }),
+			// crown
+			React.createElement("circle", { fill: facecolor, stroke: dialcolor, cx: mid, cy: mid, r: mid-15, className: "crown" }),
+			// shape connecting the hands make
 			React.createElement(Triangle, { c: mid, r: paddedRadius, time: this.state.time }),
-			React.createElement(SecCircle, { c: mid, r: paddedRadius, time: this.state.time }),
-			React.createElement(Spikes, { c: mid, r: paddedRadius }),
-			React.createElement(TextTime, {
-				time: this.state.time,
-				x: mid,
-				y: mid
-			})
+			// hands
+			React.createElement(Hands, { c: mid, r: paddedRadius, time: this.state.time }),
+			// ticks
+			React.createElement(Ticks, { c: mid, r: paddedRadius }),
+			// digital clock
+			React.createElement(TextTime, { time: this.state.time, x: mid, y: mid })
 		);
 	};
 
