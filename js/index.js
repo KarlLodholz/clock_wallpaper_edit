@@ -11,16 +11,24 @@ var hourticks = true,
 	minsecticks = true,
 	_24hourdial = true,
 	_24hourdigitial = true,
-	dialsize = 600,
-	dialoffset = 110,
-	secondradius = 5,		// second hand radius
-	minuteradius = 10,		// minute hand radius
-	hourradius	 = 15,		// hour hand radius
-	tickcolor = "#f4f4f4",
+	dialsize = 1000,
+	// dialoffset = 110,
+
+	handPrmtrWtSpc = 3,
+	secondradius = 5  + handPrmtrWtSpc,		// second hand radius
+	minuteradius = 10 + handPrmtrWtSpc,		// minute hand radius
+	hourradius	 = 20 + handPrmtrWtSpc,		// hour hand radius
+	
+	tickcolor = "#000",
 	facecolor = "#252525",
 	dialcolor = "#f4f4f4",
-	outerdialcolor = "#f4f4f4",
-	handcolor = "#45d9fd";
+	outerdialcolor = "#000",
+	handcolor = "#45d9fd",
+	outsidecrownticksize = 10,
+	crownwidth = 10,
+	handtickpadding = 3,
+	hourTickLength = 17,
+	minSecTickLength = 5;
 
 window.wallpaperPropertyListener = {
 	applyUserProperties: function (properties) {
@@ -141,13 +149,17 @@ var pathStringVars = function pathStringVars(c, r, time) {
 	var mAngFact = 6;
 	var sAngFact = 6;
 
+	var hr = r - handtickpadding - hourradius;
+	var mr = r - handtickpadding*2 - hourradius*2 - minuteradius - hourTickLength;
+	var sr = r - handtickpadding*3 - hourradius*2 - minuteradius*2 - secondradius - hourTickLength - minSecTickLength;
+
 	// calc relative coordinates 		
-	var hx = rx(r + 12, hAngFact * h, c);
-	var hy = ry(r + 12, hAngFact * h, c);
-	var mx = rx(r - 38, mAngFact * m, c);
-	var my = ry(r - 38, mAngFact * m, c);
-	var sx = rx(r - 62, sAngFact * s, c);
-	var sy = ry(r - 62, sAngFact * s, c);
+	var hx = rx(hr, hAngFact * h, c);
+	var hy = ry(hr, hAngFact * h, c);
+	var mx = rx(mr, mAngFact * m, c);
+	var my = ry(mr, mAngFact * m, c);
+	var sx = rx(sr, sAngFact * s, c);
+	var sy = ry(sr, sAngFact * s, c);
 
 	return { hx: hx, hy: hy, mx: mx, my: my, sx: sx, sy: sy };
 };
@@ -167,18 +179,20 @@ var tickNodes = function tickNodes(c, r) {
 	var increment = 15 * (_24hourdial ? 1 : 2);
 	var nodes = [];
 	var range;
+	var pdr = r;
 	// hour ticks
 	if (hourticks) {
+		pdr = pdr - hourTickLength/2 - hourradius*2+handtickpadding+1;
 		range = 12 * (_24hourdial ? 2 : 1) + 1
 		for (var i = 1; i < range; i++) {
 			var ang = i * increment;
 			var temp = React.createElement("line", {
 				className: "tick",
 				stroke: tickcolor,
-				x1: rx(r - 5, ang, c),
-				x2: rx(r - 22, ang, c),
-				y1: ry(r - 5, ang, c),
-				y2: ry(r - 22, ang, c),
+				x1: rx(pdr, ang, c),
+				x2: rx(pdr - hourTickLength, ang, c),
+				y1: ry(pdr, ang, c),
+				y2: ry(pdr - hourTickLength, ang, c),
 				key: i
 			});
 			nodes.push(temp);
@@ -187,15 +201,16 @@ var tickNodes = function tickNodes(c, r) {
 	// minute/second ticks
 	if (minsecticks) {
 		increment = 6;
+		pdr = pdr - hourTickLength - minSecTickLength/2 - minuteradius*2;
 		for (var i = 1; i < 120; i++) {
 			var ang = i * increment;
 			var temp = React.createElement("line", {
 				className: "tick",
 				stroke: tickcolor,
-				x1: rx(r - 50, ang, c),
-				x2: rx(r - 55, ang, c),
-				y1: ry(r - 50, ang, c),
-				y2: ry(r - 55, ang, c),
+				x1: rx(pdr, ang, c),
+				x2: rx(pdr - minSecTickLength, ang, c),
+				y1: ry(pdr, ang, c),
+				y2: ry(pdr - minSecTickLength, ang, c),
 				key: i
 			});
 			nodes.push(temp);
@@ -259,7 +274,9 @@ var Clock = function (_React$Component) {
 
 		var mid = dialsize / 2;
 
-		var paddedRadius = (dialsize - dialoffset) / 2 - 40;
+		var paddedRadius = mid - crownwidth - outsidecrownticksize*1.5;
+
+		mid-(crownwidth)-outsidecrownticksize*1.5
 
 		window.setTimeout(function () {
 			_this2.setState({
@@ -271,10 +288,10 @@ var Clock = function (_React$Component) {
 			"svg", 
 			{ xmlns: "http://www.w3.org/svg/2000",
 			viewBox: viewBox, width: dialsize, height: dialsize },
-			// dashed outer circle
-			React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, r: mid-5, className: "outerRing" }),
 			// crown
-			React.createElement("circle", { fill: facecolor, stroke: dialcolor, cx: mid, cy: mid, r: mid-15, className: "crown" }),
+			React.createElement("circle", { fill: facecolor, stroke: dialcolor, strokeWidth: crownwidth, cx: mid, cy: mid, r: mid-(crownwidth)/2-outsidecrownticksize*1.5}),
+			// dashed outer circle
+			React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, strokeWidth: outsidecrownticksize, r: mid-outsidecrownticksize, className: "outerRing" }),
 			// shape connecting the hands make
 			React.createElement(Triangle, { c: mid, r: paddedRadius, time: this.state.time }),
 			// hands

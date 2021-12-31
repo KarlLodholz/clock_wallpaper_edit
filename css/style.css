@@ -33,14 +33,9 @@ svg {
 
 .outerRing {
   fill: none;
-  stroke-width: 8px;
-  stroke-dasharray: 1.57px;
-  opacity: .5;
-}
-
-.crown {
-  stroke-width: 10px;
-}
+  stroke-dasharray: 1.588;
+  opacity: .314;
+} 
 
 .hands {
   stroke-width: 3px;
