@@ -1,6 +1,6 @@
 * {
-  -webkit-transition: all .2s;
-  transition: all .2s;
+  transition-duration: 1s;
+  transition-timing-function: linear;
 }
 
 body {
@@ -19,23 +19,26 @@ svg {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .textTime {
   fill: #f4f4f4;
   text-anchor: middle;
-  alignment-baseline: middle;
-  font-size: 3rem;
-  font-weight: 100;
+  /* alignment-baseline: middle; */
+  font-size: 6rem;
 }
 
 .outerRing {
   fill: none;
-  stroke-dasharray: 1.588;
-  opacity: .314;
-} 
+  stroke-width: 8px;
+  stroke-dasharray: 1.57px;
+  opacity: .5;
+}
+
+.crown {
+  stroke-width: 10px;
+}
 
 .hands {
   stroke-width: 3px;

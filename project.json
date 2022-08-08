@@ -36,27 +36,16 @@
 				"type" : "color",
 				"value" : "0.9568627450980393 0.9568627450980393 0.9568627450980393"
 			},
-			"dialoffset" : 
-			{
-				"fraction" : false,
-				"index" : 13,
-				"max" : 500,
-				"min" : -500,
-				"order" : 113,
-				"text" : "dial offset",
-				"type" : "slider",
-				"value" : 30
-			},
 			"dialsize" : 
 			{
 				"fraction" : false,
 				"index" : 12,
-				"max" : 1000,
-				"min" : 0,
+				"max" : 2000,
+				"min" : 100,
 				"order" : 112,
 				"text" : "dial size",
 				"type" : "slider",
-				"value" : 600
+				"value" : 1000
 			},
 			"digitalcolor" : 
 			{
@@ -132,7 +121,6 @@
 		}
 	},
 	"monetization" : false,
-	"preview" : "",
 	"tags" : [ "Abstract" ],
 	"title" : "Clock Edit",
 	"type" : "web",

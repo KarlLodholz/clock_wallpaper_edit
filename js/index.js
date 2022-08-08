@@ -11,102 +11,104 @@ var hourticks = true,
 	minsecticks = true,
 	_24hourdial = true,
 	_24hourdigitial = true,
-	dialsize = 1000,
-	// dialoffset = 110,
-
-	handPrmtrWtSpc = 3,
-	secondradius = 5  + handPrmtrWtSpc,		// second hand radius
-	minuteradius = 10 + handPrmtrWtSpc,		// minute hand radius
-	hourradius	 = 20 + handPrmtrWtSpc,		// hour hand radius
-	
-	tickcolor = "#000",
+	dialsize = 1200,
+	dialoffset = 110,
+	secondradius = 5,		// second hand radius
+	minuteradius = 10,		// minute hand radius
+	hourradius = 15,		// hour hand radius
+	dialscale = 1,
+	tickcolor = "#f4f4f4",
 	facecolor = "#252525",
 	dialcolor = "#f4f4f4",
-	outerdialcolor = "#000",
-	handcolor = "#45d9fd",
-	outsidecrownticksize = 10,
-	crownwidth = 10,
-	handtickpadding = 3,
-	hourTickLength = 17,
-	minSecTickLength = 5;
+	outerdialcolor = "#f4f4f4",
+	handcolor = "#45d9fd";
 
 window.wallpaperPropertyListener = {
 	applyUserProperties: function (properties) {
 		//dial options
-		if(properties.hourticks) {
+		if (properties.hourticks) {
 			hourticks = properties.hourticks.value;
 		}
-		if(properties.minsecticks) {
+		if (properties.minsecticks) {
 			minsecticks = properties.minsecticks.value;
 		}
-		if(properties._24hourdial) {
+		if (properties._24hourdial) {
 			_24hourdial = properties._24hourdial.value;
 		}
-		if(properties._24hourdigitial) {
+		if (properties._24hourdigitial) {
 			_24hourdigitial = properties._24hourdigitial.value;
 		}
-		if(properties.dialsize) {
+		if (properties.dialsize) {
 			dialsize = properties.dialsize.value;
 		}
-		if(properties.dialoffset) {
+		if (properties.dialoffset) {
 			dialoffset = properties.dialoffset.value;
 		}
+		if (properties.digitialclockfontsize) {
+			document.getElementsByClassName("textTime")[0].style.setProperty('font-size', properties.digitialclockfontsize.value + "rem");
+		}
+		if (properties.dialscale) {
+			dialscale = properties.dialscale.value;
+			secondradius = 5 * dialscale;
+			minuteradius = 10 * dialscale;
+			hourradius = 15 * dialscale;
+		}
 		//colors
-		if(properties.dialcolor) {
-			var c = properties.dialcolor.value.split(' ').map(function(c) {
+		if (properties.dialcolor) {
+			var c = properties.dialcolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
 			dialcolor = colorString;
 		}
-		if(properties.outerdialcolor) {
-			var c = properties.outerdialcolor.value.split(' ').map(function(c) {
+		if (properties.outerdialcolor) {
+			var c = properties.outerdialcolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
 			outerdialcolor = colorString;
 		}
-		if(properties.tickcolor) {
-			var c = properties.tickcolor.value.split(' ').map(function(c) {
+		if (properties.tickcolor) {
+			var c = properties.tickcolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
 			tickcolor = colorString;
 		}
-		if(properties.handcolor) {
-			var c = properties.handcolor.value.split(' ').map(function(c) {
+		if (properties.handcolor) {
+			var c = properties.handcolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
-			var colorString = 'rgb(' + c + ')'; 
+			var colorString = 'rgb(' + c + ')';
 			handcolor = colorString;
 		}
-		if(properties.facecolor) {
-			var c = properties.facecolor.value.split(' ').map(function(c) {
+		if (properties.facecolor) {
+			var c = properties.facecolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
 			facecolor = colorString;
 		}
-		if(properties.backgroundcolor) {
-			var c = properties.backgroundcolor.value.split(' ').map(function(c) {
+		if (properties.backgroundcolor) {
+			var c = properties.backgroundcolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
-			document.getElementsByTagName("body")[0].style.setProperty('background-color',colorString);
+			document.getElementsByTagName("body")[0].style.setProperty('background-color', colorString);
 		}
-		if(properties.trianglecolor) {
-			var c = properties.trianglecolor.value.split(' ').map(function(c) {
+		if (properties.trianglecolor) {
+			var c = properties.trianglecolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
-			document.getElementsByClassName("triangle")[0].style.setProperty('fill',colorString);			
+			document.getElementsByClassName("triangle")[0].style.setProperty('fill', colorString);
 		}
-		if(properties.digitalcolor) {
-			var c = properties.digitalcolor.value.split(' ').map(function(c) {
+		if (properties.digitalcolor) {
+			var c = properties.digitalcolor.value.split(' ').map(function (c) {
 				return Math.ceil(c * 255)
 			});
 			var colorString = 'rgb(' + c + ')';
-			document.getElementsByClassName("textTime")[0].style.setProperty('fill',colorString);
+			document.getElementsByClassName("textTime")[0].style.setProperty('fill', colorString);
 		}
 	},
 };
@@ -128,10 +130,11 @@ var ry = function ry(r, a, c) {
 
 // get hours, minutes, and seconds
 var HMS = function HMS(t) {
+	//seconds is incremented by 1 so that as the second hand represents the correct second
 	return {
 		h: t.getHours(),
 		m: t.getMinutes(),
-		s: t.getSeconds()
+		s: t.getSeconds()+1
 	};
 };
 
@@ -149,29 +152,25 @@ var pathStringVars = function pathStringVars(c, r, time) {
 	var mAngFact = 6;
 	var sAngFact = 6;
 
-	var hr = r - handtickpadding - hourradius;
-	var mr = r - handtickpadding*2 - hourradius*2 - minuteradius - hourTickLength;
-	var sr = r - handtickpadding*3 - hourradius*2 - minuteradius*2 - secondradius - hourTickLength - minSecTickLength;
-
 	// calc relative coordinates 		
-	var hx = rx(hr, hAngFact * h, c);
-	var hy = ry(hr, hAngFact * h, c);
-	var mx = rx(mr, mAngFact * m, c);
-	var my = ry(mr, mAngFact * m, c);
-	var sx = rx(sr, sAngFact * s, c);
-	var sy = ry(sr, sAngFact * s, c);
+	var hx = rx(r + 12, hAngFact * h, c);
+	var hy = ry(r + 12, hAngFact * h, c);
+	var mx = rx(r - 38, mAngFact * m, c);
+	var my = ry(r - 38, mAngFact * m, c);
+	var sx = rx(r - 62, sAngFact * s, c);
+	var sy = ry(r - 62, sAngFact * s, c);
 
 	return { hx: hx, hy: hy, mx: mx, my: my, sx: sx, sy: sy };
 };
 
 var TextTime = function TextTime(i) {
 	var str = i.time.toTimeString().slice(0, 8).replace(/:/g, " : ");
-	if(!_24hourdigitial) {
-		str = i.time.getHours()%12 + " : " 
-		  + ("0"+i.time.getMinutes()).slice(-2) + " : " 
-		  + ("0"+i.time.getSeconds()).slice(-2);
+	if (!_24hourdigitial) {
+		str = i.time.getHours() % 12 + " : "
+			+ ("0" + i.time.getMinutes()).slice(-2) + " : "
+			+ ("0" + i.time.getSeconds()).slice(-2);
 	}
-	return React.createElement("text", { x: i.x, y: i.y, className: "textTime" }, str);
+	return React.createElement("text", { x: i.x, y: i.y+34, className: "textTime" }, str);
 };
 
 // hour hands
@@ -179,20 +178,18 @@ var tickNodes = function tickNodes(c, r) {
 	var increment = 15 * (_24hourdial ? 1 : 2);
 	var nodes = [];
 	var range;
-	var pdr = r;
 	// hour ticks
 	if (hourticks) {
-		pdr = pdr - hourTickLength/2 - hourradius*2+handtickpadding+1;
 		range = 12 * (_24hourdial ? 2 : 1) + 1
 		for (var i = 1; i < range; i++) {
 			var ang = i * increment;
 			var temp = React.createElement("line", {
 				className: "tick",
 				stroke: tickcolor,
-				x1: rx(pdr, ang, c),
-				x2: rx(pdr - hourTickLength, ang, c),
-				y1: ry(pdr, ang, c),
-				y2: ry(pdr - hourTickLength, ang, c),
+				x1: rx(r - 5, ang, c),
+				x2: rx(r - 22, ang, c),
+				y1: ry(r - 5, ang, c),
+				y2: ry(r - 22, ang, c),
 				key: i
 			});
 			nodes.push(temp);
@@ -201,16 +198,15 @@ var tickNodes = function tickNodes(c, r) {
 	// minute/second ticks
 	if (minsecticks) {
 		increment = 6;
-		pdr = pdr - hourTickLength - minSecTickLength/2 - minuteradius*2;
 		for (var i = 1; i < 120; i++) {
 			var ang = i * increment;
 			var temp = React.createElement("line", {
 				className: "tick",
 				stroke: tickcolor,
-				x1: rx(pdr, ang, c),
-				x2: rx(pdr - minSecTickLength, ang, c),
-				y1: ry(pdr, ang, c),
-				y2: ry(pdr - minSecTickLength, ang, c),
+				x1: rx(r - 50, ang, c),
+				x2: rx(r - 55, ang, c),
+				y1: ry(r - 50, ang, c),
+				y2: ry(r - 55, ang, c),
 				key: i
 			});
 			nodes.push(temp);
@@ -244,21 +240,27 @@ var Hands = function Hands(i) {
 	return React.createElement(
 		"g",
 		null,
-		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.hx, cy: p.hy, r: hourradius, className: "hands" }),		
-		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.mx, cy: p.my, r: minuteradius, className: "hands" }),		
-		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.sx, cy: p.sy, r: secondradius, className: "hands" }),		
+		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.hx, cy: p.hy, r: hourradius, className: "hands" }),
+		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.mx, cy: p.my, r: minuteradius, className: "hands" }),
+		React.createElement("circle", { fill: handcolor, stroke: facecolor, cx: p.sx, cy: p.sy, r: secondradius, className: "hands" }),
 	);
 };
+
+var Static_Parts = null;
+var dashed_outer_circle;
+var crown;
+var ticks;
 
 // main container
 var Clock = function (_React$Component) {
 	_inherits(Clock, _React$Component);
-
+	
 	function Clock() {
 		_classCallCheck(this, Clock);
 
 		var _this = _possibleConstructorReturn(this, _React$Component.call(this));
-
+		
+		
 		_this.state = {
 			time: new Date()
 		};
@@ -274,30 +276,38 @@ var Clock = function (_React$Component) {
 
 		var mid = dialsize / 2;
 
-		var paddedRadius = mid - crownwidth - outsidecrownticksize*1.5;
-
-		mid-(crownwidth)-outsidecrownticksize*1.5
-
+		var paddedRadius = dialsize / 2 - 32.5 - hourradius - dialoffset * dialscale * dialscale;
+		
 		window.setTimeout(function () {
 			_this2.setState({
 				time: new Date()
 			});
 		}, 1000);
 
+		if(Static_Parts == null) {
+			console.log(Static_Parts);
+			dashed_outer_circle = React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, r: mid - 5, className: "outerRing" });
+			crown = React.createElement("circle", { fill: facecolor, stroke: dialcolor, cx: mid, cy: mid, r: mid - 15, className: "crown" });
+			ticks = React.createElement(Ticks, { c: mid, r: paddedRadius });
+			Static_Parts = 1;
+		}
+
 		return React.createElement(
-			"svg", 
-			{ xmlns: "http://www.w3.org/svg/2000",
-			viewBox: viewBox, width: dialsize, height: dialsize },
-			// crown
-			React.createElement("circle", { fill: facecolor, stroke: dialcolor, strokeWidth: crownwidth, cx: mid, cy: mid, r: mid-(crownwidth)/2-outsidecrownticksize*1.5}),
+			"svg",
+			{
+				xmlns: "http://www.w3.org/svg/2000",
+				viewBox: viewBox, width: dialsize, height: dialsize
+			},
 			// dashed outer circle
-			React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, strokeWidth: outsidecrownticksize, r: mid-outsidecrownticksize, className: "outerRing" }),
+			dashed_outer_circle,
+			// crown
+			crown,
 			// shape connecting the hands make
 			React.createElement(Triangle, { c: mid, r: paddedRadius, time: this.state.time }),
 			// hands
 			React.createElement(Hands, { c: mid, r: paddedRadius, time: this.state.time }),
 			// ticks
-			React.createElement(Ticks, { c: mid, r: paddedRadius }),
+			ticks,
 			// digital clock
 			React.createElement(TextTime, { time: this.state.time, x: mid, y: mid })
 		);
@@ -305,5 +315,5 @@ var Clock = function (_React$Component) {
 
 	return Clock;
 }(React.Component);
-
+// ReactDOM.render(React.createElement(Static_Parts, null), document.querySelector('.static_parts'));
 ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock'));
