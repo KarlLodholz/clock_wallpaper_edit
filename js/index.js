@@ -110,6 +110,7 @@ window.wallpaperPropertyListener = {
 			var colorString = 'rgb(' + c + ')';
 			document.getElementsByClassName("textTime")[0].style.setProperty('fill', colorString);
 		}
+		Static_Parts = false;
 	},
 };
 
@@ -246,10 +247,12 @@ var Hands = function Hands(i) {
 	);
 };
 
-var Static_Parts = null;
-var dashed_outer_circle;
-var crown;
-var ticks;
+// bool to check if the static parts need to be recreated if given new paremeters
+var Static_Parts = false; 
+//these are static and dont need to be recreated everytime, so a ref can be used
+var dashed_outer_circle_element;
+var crown_element;
+var ticks_element;
 
 // main container
 var Clock = function (_React$Component) {
@@ -284,30 +287,26 @@ var Clock = function (_React$Component) {
 			});
 		}, 1000);
 
-		if(Static_Parts == null) {
-			console.log(Static_Parts);
-			dashed_outer_circle = React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, r: mid - 5, className: "outerRing" });
-			crown = React.createElement("circle", { fill: facecolor, stroke: dialcolor, cx: mid, cy: mid, r: mid - 15, className: "crown" });
-			ticks = React.createElement(Ticks, { c: mid, r: paddedRadius });
-			Static_Parts = 1;
+		if(!Static_Parts) {
+			dashed_outer_circle_element = React.createElement("circle", { stroke: outerdialcolor, cx: mid, cy: mid, r: mid - 5, className: "outerRing" });
+			crown_element = React.createElement("circle", { fill: facecolor, stroke: dialcolor, cx: mid, cy: mid, r: mid - 15, className: "crown" });
+			ticks_element = React.createElement(Ticks, { c: mid, r: paddedRadius });
+			Static_Parts = true;
 		}
 
 		return React.createElement(
-			"svg",
-			{
-				xmlns: "http://www.w3.org/svg/2000",
-				viewBox: viewBox, width: dialsize, height: dialsize
-			},
+			"svg", 
+			{ viewBox: viewBox, width: dialsize, height: dialsize },
 			// dashed outer circle
-			dashed_outer_circle,
+			dashed_outer_circle_element,
 			// crown
-			crown,
+			crown_element,
 			// shape connecting the hands make
 			React.createElement(Triangle, { c: mid, r: paddedRadius, time: this.state.time }),
 			// hands
 			React.createElement(Hands, { c: mid, r: paddedRadius, time: this.state.time }),
 			// ticks
-			ticks,
+			ticks_element,
 			// digital clock
 			React.createElement(TextTime, { time: this.state.time, x: mid, y: mid })
 		);
@@ -315,5 +314,11 @@ var Clock = function (_React$Component) {
 
 	return Clock;
 }(React.Component);
-// ReactDOM.render(React.createElement(Static_Parts, null), document.querySelector('.static_parts'));
-ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock'));
+
+function delay(time) {
+	return new Promise(resolve => setTimeout(resolve, time));
+}
+
+delay(100).then(() => ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock')));
+
+// ReactDOM.render(React.createElement(Clock, null), document.querySelector('.clock'));
